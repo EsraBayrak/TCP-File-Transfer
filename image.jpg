@@ -1,0 +1,32 @@
+#ifndef COMMON_H
+#define COMMON_H
+
+#define _WIN32_WINNT 0x0600
+
+#include <stdint.h>
+#include <winsock2.h>
+
+/* Error handling */
+void die(const char* msg);
+
+/* WinSock */
+void winsock_init(void);
+void winsock_cleanup(void);
+
+/* Socket IO helpers */
+int send_all(SOCKET s, const void* buf, int len);
+int recv_all(SOCKET s, void* buf, int len);
+int recv_line(SOCKET s, char* out, int maxlen);
+
+/* CRC32 */
+void crc32_init(void);
+uint32_t crc32_calc(const void* data, size_t len);
+
+/* XOR (same operation for encode/decode) */
+void xor_apply(uint8_t* buf, int len, uint8_t key);
+
+/* Frame CRC (header+payload CRC used by both sides) */
+uint32_t frame_crc(const struct FrameHeader* h, const uint8_t* payload);
+
+#endif
+
