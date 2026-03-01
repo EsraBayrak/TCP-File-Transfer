@@ -25,7 +25,8 @@ This application implements a file transfer system over TCP using a custom frame
 The system follows a client-server architecture:
 
 - `server.c` → Listens on port 5050 and receives file frames  
-- `client.c` → Connects to the server and sends file frames  
+- `client.c` → Connects to the server and sends file frames
+- `main.c` → Entry point / launcher. Runs **server** or **client** mode based on CLI argument (`server` / `client`) or an interactive menu. 
 - `protocol.h` → Defines frame structure  
 - `common.c / common.h` → Shared utility functions  
 
@@ -52,32 +53,66 @@ This guarantees reliable file transmission even in the presence of transmission 
 
 ## ▶ How to Compile (Windows)
 
-Using MinGW or a compatible C compiler:
+### Option 1: Single Executable (Recommended)
+
+```bash
+gcc main.c server.c client.c common.c -o app -lws2_32
+```
+
+This creates a single executable:
+
+```bash
+app.exe
+```
+
+---
+
+### Option 2: Separate Executables
 
 ```bash
 gcc server.c common.c -o server -lws2_32
 gcc client.c common.c -o client -lws2_32
 ```
 
----
-
 ## ▶ How to Run
 
-1. Start the server:
+### Option 1: Single Executable (Recommended)
+
+If compiled with `main.c`, the application runs as a single executable.
+
+Start the server:
+
+```bash
+app.exe server
+```
+
+Start the client:
+
+```bash
+app.exe client
+```
+
+If no argument is provided, the program will display an interactive menu allowing you to choose between server and client modes.
+
+---
+
+### Option 2: Separate Executables
+
+If compiled separately:
+
+Start the server:
 
 ```bash
 server.exe
 ```
 
-2. Start the client:
+Start the client:
 
 ```bash
 client.exe
 ```
 
-The client connects to the server on port 5050 and transfers the selected file using the custom protocol.
-
----
+The client connects to the server on port 5050 and transfers the file using the custom frame-based protocol with CRC validation and Stop-and-Wait ARQ.
 
 ## 🔍 Concepts Demonstrated
 
